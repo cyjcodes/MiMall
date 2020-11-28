@@ -52,12 +52,12 @@
       </div>
       <div class="ads-box">
         <a v-bind:href="'/#/product/'+item.id" v-for="(item,index) in adsList" v-bind:key="index">
-          <img v-bind:src="item.img" alt="">
+          <img v-lazy="item.img" alt="">
         </a>
       </div>
       <div class="banner">
         <a href="/#/product/30">
-          <img src="/imgs/banner-1.png" alt="">
+          <img v-lazy="'/imgs/banner-1.png'" alt="">
         </a>
       </div>
     </div>
@@ -67,7 +67,7 @@
         <div class="wrapper">
           <div class="banner-left">
             <a href="/#/product/35">
-              <img src="/imgs/mix-alpha.jpg" alt="">
+              <img v-lazy="'/imgs/mix-alpha.jpg'" alt="">
             </a>
           </div>
           <div class="list-box">
@@ -75,12 +75,12 @@
               <div class="item" v-for="(item,j) in arr" v-bind:key="j">
                 <span v-bind:class="[(j%2==0)?'new-pro':'kill-pro']">{{j%2==0?'新品':'秒杀'}}</span>
                 <div class="item-img">
-                  <img v-bind:src="item.mainImage" alt="">
+                  <img v-lazy="item.mainImage" alt="">
                 </div>
                 <div class="item-info">
                   <h3>{{item.name}}</h3>
                   <p>{{item.subtitle}}</p>
-                  <p class="price">{{item.price}}元</p>
+                  <p class="price" @click="addCart(item.id)">{{item.price}}元</p>
                 </div>
               </div>
             </div>
@@ -89,10 +89,25 @@
       </div>
     </div>
     <service-bar></service-bar>
+    <!-- v-on:submit因为是组件而不是标签，所以用传递的名称定义，而不是v-on:click -->
+    <modal 
+      title="提示" 
+      sureText="查看购物车" 
+      btnType="1" 
+      modalType="middle" 
+      v-bind:showModal="showModal"
+      v-on:submit="goToCart"
+      v-on:cancel="showModal=false"
+      >
+      <template v-slot:body>
+        <p>商品添加成功！</p>
+      </template>
+    </modal>
   </div>
 </template>
 <script>
   import ServiceBar from './../components/ServiceBar'
+  import Modal from './../components/Modal'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
   import 'swiper/dist/css/swiper.css'
   export default{
@@ -100,7 +115,8 @@
     components:{
       swiper,
       swiperSlide,
-      ServiceBar
+      ServiceBar,
+      Modal
     },
     data(){
       return {
@@ -180,7 +196,8 @@
             img:'/imgs/ads/ads-4.jpg'
           }
         ],
-        phoneList:[]
+        phoneList:[],
+        showModal:false
       }
     },
     mounted(){
@@ -191,11 +208,26 @@
         this.axios.get('/products',{
           params:{
             categoryId:100012,
-            pageSize:8
+            pageSize:14
           }
         }).then((res)=>{
+          res.list = res.list.slice(6,14);
           this.phoneList = [res.list.slice(0,4),res.list.slice(4,8)];
         })
+      },
+      addCart(){
+        this.showModal = true;
+        /*this.axios.post('/carts',{
+          productId:id,
+          selected: true
+        }).then(()=>{
+          
+        }).catch(()=>{
+          this.showModal = true;
+        })*/
+      },
+      goToCart(){
+        this.$router.push('/cart');
       }
     }
   }
@@ -333,7 +365,7 @@
                 font-size:14px;
                 line-height:24px;
                 color:$colorG;
-                &.new-pro{ // &.new-pro = span .new-pro(有空格，为后代元素)
+                &.new-pro{ // 编译后：&.new-pro = span .new-pro(有空格，为后代元素)
                   background-color:#7ECF68;
                 }
                 &.kill-pro{
