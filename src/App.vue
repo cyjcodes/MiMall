@@ -21,13 +21,13 @@ export default {
   },
   methods:{
     getUser(){
-      this.axios.get('/user').then(()=>{
-        // to-do 保存到vuex里面
+      this.axios.get('/user').then((res={})=>{//res={}加一个默认值为object，因为未登录时res为undefined，可能会报错
+        this.$store.dispatch('saveUserName',res.username);
       })
     },
     getCartCount(){
-      this.axios.get('/carts/products/sum').then(()=>{
-        // to-do 保存到vuex里面
+      this.axios.get('/carts/products/sum').then((res=0)=>{//也加默认值，防止报错
+        this.$store.dispatch('saveCartCount',res);
       })
     }
   }

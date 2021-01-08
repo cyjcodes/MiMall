@@ -73,7 +73,7 @@
           <div class="list-box">
             <div class="list" v-for="(arr,i) in phoneList" v-bind:key="i">
               <div class="item" v-for="(item,j) in arr" v-bind:key="j">
-                <span v-bind:class="[(j%2==0)?'new-pro':'kill-pro']">{{j%2==0?'新品':'秒杀'}}</span>
+                <span v-bind:class="[(item.price > 1000)?'new-pro':'kill-pro']">{{item.price > 1000?'新品':'秒杀'}}</span>
                 <div class="item-img">
                   <img v-lazy="item.mainImage" alt="">
                 </div>
@@ -215,16 +215,16 @@
           this.phoneList = [res.list.slice(0,4),res.list.slice(4,8)];
         })
       },
-      addCart(){
-        this.showModal = true;
-        /*this.axios.post('/carts',{
+      addCart(id){
+        this.axios.post('/carts',{
           productId:id,
           selected: true
-        }).then(()=>{
-          
+        }).then((res)=>{
+          this.showModal = true;
+          this.$store.dispatch('saveCartCount',res.cartTotalQuantity);//更新购物车数量
         }).catch(()=>{
           this.showModal = true;
-        })*/
+        })
       },
       goToCart(){
         this.$router.push('/cart');
