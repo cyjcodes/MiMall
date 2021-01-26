@@ -11,6 +11,7 @@
         <div class="topbar-user">
           <a href="javascript:;" v-if="username">{{username}}</a>
           <a href="javascript:;" v-if="!username" @click="login">登录</a>
+          <a href="javascript:;" v-if="username" @click="logout">退出</a>
           <a href="javascript:;" v-if="username">我的订单</a>
           <a href="javascript:;" class="my-cart" @click="goToCart"><span class="icon-cart"></span>购物车({{cartCount}})</a>
         </div>
@@ -138,6 +139,10 @@
     },
     mounted(){
       this.getProductList();
+      let params = this.$route.params;
+      if (params && params.from == 'login') {
+        this.getCartCount();
+      }
     },
     methods:{
       login(){
@@ -151,6 +156,20 @@
           }
         }).then((res)=>{
           this.phoneList = res.list
+        })
+      },
+      logout(){
+        this.axios.post('/user/logout').then(()=>{
+          this.$message.success('退出成功');
+          this.$cookie.set('userId','',{expires:'-1'}); // 后端只是清除会话，前端清除cookie,立刻过期
+          this.$store.dispatch('saveUserName',''); // 把vuex数据清空，用户名清空
+          this.$store.dispatch('saveCartCount', '0');
+        })
+      },
+      // 因为是单页面(App.vue)的，所以会把数据存储到vuex里面去,vuex实际上是去内存里面存储的，当刷新后内存里的数据会自动消失，为保持数据的一致性，需重新获取购物车的数量，重新存到vuex里，单页面单向跳转，登录退出不会再次执行App.vue
+      getCartCount(){
+        this.axios.get('/carts/products/sum').then((res=0)=>{//也加默认值，防止报错
+          this.$store.dispatch('saveCartCount',res);
         })
       },
       goToCart(){

@@ -4,6 +4,8 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import VueLazyLoad from 'vue-lazyload'
 import VueCookie from 'vue-cookie'
+import { Message } from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
 import store from './store'
 import App from './App.vue'
 // import env from './env'
@@ -30,7 +32,7 @@ axios.interceptors.response.use(function(response){
     }
     return Promise.reject(res);
   }else{
-    alert(res.msg);
+    Message.warning(res.msg);
     return Promise.reject(res);
   }
 });
@@ -40,6 +42,7 @@ Vue.use(VueCookie);
 Vue.use(VueLazyLoad,{
   loading:'/imgs/loading-svg/loading-bubbles.svg'
 });
+Vue.prototype.$message = Message; // 先import，再通过Vue原型的方式扩展一个对象，把Message方法绑定上去，然后就可以全局运用，例如：this.$message.warning('用户名不能为空')
 Vue.config.productionTip = false
 
 new Vue({

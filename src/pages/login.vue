@@ -51,14 +51,26 @@ export default {
   methods:{
     login(){
       let { username,password } = this;
+      if (!this.username) {
+        this.$message.warning('用户名不能为空')
+        return
+      } else if (!this.password) {
+        this.$message.warning('密码不能为空')
+        return
+      }
       this.axios.post('/user/login',{
         username,
         password
       }).then((res)=>{
-        this.$cookie.set('userId',res.id,{expires:'1M'});
+        this.$cookie.set('userId',res.id,{expires:'Session'}); // 设置过期时间会Session，关闭浏览器（进程也要杀掉）后过期
         // this.$store.dispatch('saveUserName',res.username);
         this.saveUserName(res.username);
-        this.$router.push('/index');
+        this.$router.push({
+          name:'index',
+          params:{
+            from:'login'
+          }
+        });
       })
     },
     ...mapActions(['saveUserName']),
@@ -68,8 +80,16 @@ export default {
         username,
         password
       }).then(()=>{
-        alert('注册成功');
+        this.$message.success('注册成功');
         this.$router.push('/index');
+      }).catch(()=>{
+        if (!this.username) {
+          this.$message.warning('用户名不能为空')
+          return
+        } else if (!this.password) {
+          this.$message.warning('密码不能为空')
+          return
+        }
       })
     }
   }
