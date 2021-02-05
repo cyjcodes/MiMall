@@ -103,6 +103,7 @@ export default{
       }).then((res={cartProductVoList:0})=>{
         this.$store.dispatch('saveCartCount',res.cartTotalQuantity);//更新购物车数量
         // this.$router.push('/cart');
+        this.$message.success('加入购物车成功');
       });
     }
   }

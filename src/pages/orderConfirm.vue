@@ -278,7 +278,7 @@ export default{
       }).then((res)=>{
         this.$router.push({
           path:'/order/pay',
-          query:{
+          query:{//地址传参
             orderNo:res.orderNo
           }
         })

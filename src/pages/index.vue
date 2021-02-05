@@ -92,8 +92,9 @@
     <!-- v-on:submit因为是组件而不是标签，所以用传递的名称定义，而不是v-on:click -->
     <modal 
       title="提示" 
-      sureText="查看购物车" 
-      btnType="1" 
+      sureText="查看购物车"
+      cancelText="继续添加商品"
+      btnType="3"
       modalType="middle" 
       v-bind:showModal="showModal"
       v-on:submit="goToCart"

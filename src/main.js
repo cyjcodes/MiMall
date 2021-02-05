@@ -8,14 +8,8 @@ import { Message } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import store from './store'
 import App from './App.vue'
-// import env from './env'
-// mock开关
-const mock = false;
-if(mock){
-  require('./mock/api');
-}
+
 // 根据前端的跨域方式做调整 /a/b : /api/a/b => /a/b
-// axios.defaults.baseURL = 'https://www.easy-mock.com/mock/5dc7afee2b69d9223b633cbb/mimall';
 axios.defaults.baseURL = '/api';
 axios.defaults.timeout = 8000; 
 // 根据环境变量获取不同的请求地址
@@ -30,11 +24,16 @@ axios.interceptors.response.use(function(response){
     if (path != '#/index') {
       window.location.href = '/#/login';
     }
-    return Promise.reject(res);
+    return Promise.reject(res);// 抛出异常，防止认为为正常请求，直接通过到then
   }else{
     Message.warning(res.msg);
     return Promise.reject(res);
   }
+},(error)=>{
+  // 错误分两种，一种是接口的异常（业务的异常），一种是服务器的异常（请求得异常）。这里是服务器发来的报错，http状态码为500，来解决订单支付后，返回订单支付页会提示已支付
+  let res = error.response;
+  Message.error(res.data.message);
+  return Promise.reject(error);
 });
 
 Vue.use(VueAxios,axios);
