@@ -1,4 +1,4 @@
-// vue.config.js就是整个webpack的配置表，会在webpack加载,最终会把它传给node.js去实现
+// vue.config.js就是整个webpack的配置表，会在webpack加载,最终会把它传给node.js去实现的
 // 这里是node.js服务器，遵循commonJS规范，所以不用import引入，而用module.exports导入模块。
 // 接口代理：它就是我们自己的接口，但是内部会通过node.js去转发别人的服务。跨域只有在前端浏览器才会存在，因为这是浏览器自己的安全策略，它不允许你通过localhost域名去调用其他网站的接口
 module.exports = {
