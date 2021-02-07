@@ -19,6 +19,7 @@ export default new Router({
       path:'/',
       name:'home',
       component:Home,
+      // 首先我们加载页面的时候会先到home，home里有嵌套视图，节省每个页面去导入<nav-header>,各个路由共用home组件，通过重定向页面首先打开的是index页面
       redirect:'/index',
       children:[
         {

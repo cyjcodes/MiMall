@@ -9,10 +9,10 @@ import 'element-ui/lib/theme-chalk/index.css'
 import store from './store'
 import App from './App.vue'
 
-// 根据前端的跨域方式做调整 /a/b : /api/a/b => /a/b
+// 根据前端的跨域方式做调整 /a/b : /api/a/b => /a/b ，当前跨域方式为接口跨域
 axios.defaults.baseURL = '/api';
-axios.defaults.timeout = 8000; 
-// 根据环境变量获取不同的请求地址
+axios.defaults.timeout = 8000; //超时
+// 根据环境变量获取不同的请求地址，cors和jsonp跨域使用，接口跨域不需要
 // axios.defaults.baseURL = env.baseURL;
 // 接口错误拦截
 axios.interceptors.response.use(function(response){
