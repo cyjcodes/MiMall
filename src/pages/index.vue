@@ -56,6 +56,7 @@
         </a>
       </div>
       <div class="banner">
+        <!-- <a href="javascript:;" @click="goProducts"> -->
         <a href="/#/product/30">
           <img v-lazy="'/imgs/banner-1.png'" alt="">
         </a>

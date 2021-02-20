@@ -81,7 +81,7 @@ export default {
         password
       }).then(()=>{
         this.$message.success('注册成功');
-        this.$router.push('/index');
+        this.login();
       }).catch(()=>{
         if (!this.username) {
           this.$message.warning('用户名不能为空')

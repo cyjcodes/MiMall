@@ -16,5 +16,13 @@ module.exports = {
         }
       }
     }
+  },
+  // publicPath:'/app',
+  // outputDir:'dist',
+  // indexPath:'index2.html',
+  // lintOnSave:false, // 关闭eslint校验
+  productionSourceMap:false, //关闭源码的展示，加速打包构建和安全
+  chainWebpack:(config) => {
+    config.plugins.delete('prefetch'); // 删除预加载
   }
 }

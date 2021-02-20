@@ -1,16 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './pages/home'
-import Login from './pages/login'
 import Index from './pages/index'
-import Product from './pages/product'
-import Detail from './pages/detail'
-import Cart from './pages/cart'
-import Order from './pages/order'
-import OrderConfirm from './pages/orderConfirm'
-import OrderList from './pages/orderList'
-import OrderPay from './pages/orderPay'
-import AliPay from './pages/alipay'
 Vue.use(Router);
 
 export default new Router({
@@ -29,48 +20,51 @@ export default new Router({
         }, {
           path: '/product/:id',
           name: 'product',
-          component: Product,
+          // 路由懒加载是为了更好的用户体验，首屏组件加载的速度快一点，解决了白屏的问题.懒加载就是延迟加载或者按需加载.常用的懒加载有两种，vue异步组件和es的import.
+          // component: resolve => require(['./pages/product.vue'],resolve),//vue异步组件
+          component: () => import('./pages/product.vue') // 按需加载，如果用import引入的话，当项目打包时路由里的所有component都会打包在一个js中，造成进入首页时，需要加载的内容过多，时间相对比较长。当你用es7语法的import这种方式引入的时候，会将你的component分别打包成不同的js，加载的时候也是按需加载，只用访问这个路由网址时才会加载这个js。
         }, {
           path: '/detail/:id',
           name: 'detail',
-          component: Detail,
+          component: () => import('./pages/detail.vue')
         }
       ]
     },
     {
-      path: '/cart',
-      name: 'cart',
-      component: Cart
-    },
-    {
       path: '/login',
       name: 'login',
-      component: Login
+      component: () => import('./pages/login.vue'),// 按需加载：es7语法的import
     },
+    {
+      path: '/cart',
+      name: 'cart',
+      component: () => import('./pages/cart.vue')
+    },
+    
     {
       path: '/order',
       name: 'order',
-      component: Order,
+      component: () => import('./pages/order.vue'),
       children:[
         {
           path: 'list',
           name: 'order-list',
-          component: OrderList,
+          component: () => import('./pages/orderList.vue')
         },
         {
           path: 'confirm',
           name: 'order-confirm',
-          component: OrderConfirm,
+          component: () => import('./pages/orderConfirm.vue')
         },
         {
           path: 'pay',
           name: 'order-pay',
-          component: OrderPay,
+          component: () => import('./pages/orderPay.vue')
         },
         {
           path: 'alipay',
           name: 'alipay',
-          component: AliPay,
+          component: () => import('./pages/alipay.vue')
         }
       ]
     }
