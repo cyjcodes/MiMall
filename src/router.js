@@ -20,7 +20,7 @@ export default new Router({
         }, {
           path: '/product/:id',
           name: 'product',
-          // 路由懒加载是为了更好的用户体验，首屏组件加载的速度快一点，解决了白屏的问题.懒加载就是延迟加载或者按需加载.常用的懒加载有两种，vue异步组件和es的import.
+          // 路由懒加载是为了更好的用户体验，首屏组件加载的速度快一点，解决了白屏的问题.懒加载就是延迟加载或者按需加载.常用的懒加载有两种，vue异步组件和es7的import.
           // component: resolve => require(['./pages/product.vue'],resolve),//vue异步组件
           component: () => import('./pages/product.vue') // 按需加载，如果用import引入的话，当项目打包时路由里的所有component都会打包在一个js中，造成进入首页时，需要加载的内容过多，时间相对比较长。当你用es7语法的import这种方式引入的时候，会将你的component分别打包成不同的js，加载的时候也是按需加载，只用访问这个路由网址时才会加载这个js。
         }, {
@@ -33,7 +33,12 @@ export default new Router({
     {
       path: '/login',
       name: 'login',
-      component: () => import('./pages/login.vue'),// 按需加载：es7语法的import
+      component: () => import('./pages/login.vue')// 按需加载：es7语法的import
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: () => import('./pages/register.vue')
     },
     {
       path: '/cart',

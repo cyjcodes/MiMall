@@ -31,8 +31,8 @@ axios.interceptors.response.use(function(response){
   }
 },(error)=>{
   // 错误分两种，一种是接口的异常（业务的异常），一种是服务器的异常（请求得异常）。这里是服务器发来的报错，http状态码为500，来解决订单支付后，返回订单支付页会提示已支付
-  let res = error.response;
-  Message.error(res.data.message);
+  // let res = error.response;
+  // Message.error(res.data.message);
   return Promise.reject(error);
 });
 
